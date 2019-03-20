@@ -2,7 +2,24 @@
 ;
 ; Copyright Potrepalov I.S.  potrepalov@list.ru
 ;
-;  Ìàêðîñû îáùåãî íàçíà÷åíèÿ
+; silOS: Short Interrupt Latency OS
+; Copyright (C) 2010 Potrepalov I.S.  potrepalov@list.ru
+;
+;   This library is free software; you can redistribute it and/or
+;   modify it under the terms of the GNU Lesser General Public
+;   License as published by the Free Software Foundation; either
+;   version 2 of the License, or (at your option) any later version.
+;
+;   This library is distributed in the hope that it will be useful,
+;   but WITHOUT ANY WARRANTY; without even the implied warranty of
+;   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;   Lesser General Public License for more details.
+;
+;   You should have received a copy of the GNU Lesser General Public
+;   License along with this library; if not, write to the Free Software
+;   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+;
+;  ÐœÐ°ÐºÑ€Ð¾ÑÑ‹ Ð¾Ð±Ñ‰ÐµÐ³Ð¾ Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ
 ;
 
 
@@ -26,15 +43,15 @@
 
 
 .macro _get_reg	reg,v
-; Ïî èìåíè ðåãèñòðà reg âîçâðàùàåò åãî íîìåð â ïåðåìåííîé v
-; Èìÿ ìîæåò áûòü îäíèì èç ñëåäóþùèõ: r0, r1, ..., r31, R0, R1, ..., R31,
+; ÐŸÐ¾ Ð¸Ð¼ÐµÐ½Ð¸ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð° reg Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ ÐµÐ³Ð¾ Ð½Ð¾Ð¼ÐµÑ€ Ð² Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ð¾Ð¹ v
+; Ð˜Ð¼Ñ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ð´Ð½Ð¸Ð¼ Ð¸Ð· ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ñ…: r0, r1, ..., r31, R0, R1, ..., R31,
 ; x, y, z, X, Y, Z, xl, xh, yl, yh, zl, zh, XL, XH, YL, YH, ZL, ZH
-; Åñëè èìÿ íå ñîâïàäàåò íè ñ îäíèì èç óêàçàííûõ, òî â ïåðåìåííîé v âîçâðàùàåòñÿ
-; çíà÷åíèå reg.
+; Ð•ÑÐ»Ð¸ Ð¸Ð¼Ñ Ð½Ðµ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°ÐµÑ‚ Ð½Ð¸ Ñ Ð¾Ð´Ð½Ð¸Ð¼ Ð¸Ð· ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ñ‹Ñ…, Ñ‚Ð¾ Ð² Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ð¾Ð¹ v Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ÑÑ
+; Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ reg.
 
-; Ýòîò ìàêðîñ ïîçâîëÿåò ïèñàòü êîìàíäû 'adiw Z, xxx', 'movw X, r10'
+; Ð­Ñ‚Ð¾Ñ‚ Ð¼Ð°ÐºÑ€Ð¾Ñ Ð¿Ð¾Ð·Ð²Ð¾Ð»ÑÐµÑ‚ Ð¿Ð¸ÑÐ°Ñ‚ÑŒ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹ 'adiw Z, xxx', 'movw X, r10'
 
-	.L_reg = \reg	; âîçâðàùàåìîå çíà÷åíèå ïî óìîë÷àíèþ
+	.L_reg = \reg	; Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ
 
 	.L_reg_n = 26
 	.irp	_reg,	X,Y,Z
@@ -95,27 +112,27 @@
 
 
 .macro addi	to, val
-; Ïðèáàâëåíèå êîíñòàíòû ê ðåãèñòðó
+; ÐŸÑ€Ð¸Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð½ÑÑ‚Ð°Ð½Ñ‚Ñ‹ Ðº Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ñƒ
 	subi	\to, 0 - (\val)
 .endm ; addi
 
 .macro addiw	to, val
-; Ïðèáàâëåíèå êîíñòàíòû ê ðåãèñòðîâîé ïàðå
+; ÐŸÑ€Ð¸Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ð½ÑÑ‚Ð°Ð½Ñ‚Ñ‹ Ðº Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¾Ð²Ð¾Ð¹ Ð¿Ð°Ñ€Ðµ
 	_get_reg	\to, .L_to
 	subi	.L_to, lo8(-(\val))
 	sbci    .L_to+1, hi8(-(\val))
 .endm ; addiw
 
 .macro subiw    to, val
-; Âû÷èòàíèå êîíñòàíòû èç ðåãèñòðîâîé ïàðû
+; Ð’Ñ‹Ñ‡Ð¸Ñ‚Ð°Ð½Ð¸Ðµ ÐºÐ¾Ð½ÑÑ‚Ð°Ð½Ñ‚Ñ‹ Ð¸Ð· Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¾Ð²Ð¾Ð¹ Ð¿Ð°Ñ€Ñ‹
 	_get_reg	\to, .L_to
 	subi	.L_to, lo8((\val))
 	sbci    .L_to+1, hi8((\val))
 .endm ; subiw
 
 
-; Çàìåíà êîìàíä ðàáîòàþùèõ ñ ïàðàìè ðåãèñòðîâ.
-; Òàêàÿ çàìåíà ïîçâîëèò èñïîëüçîâàòü óäîáíûå èìåíà ðåãèñòðîâ.
+; Ð—Ð°Ð¼ÐµÐ½Ð° ÐºÐ¾Ð¼Ð°Ð½Ð´ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ñ… Ñ Ð¿Ð°Ñ€Ð°Ð¼Ð¸ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¾Ð².
+; Ð¢Ð°ÐºÐ°Ñ Ð·Ð°Ð¼ÐµÐ½Ð° Ð¿Ð¾Ð·Ð²Ð¾Ð»Ð¸Ñ‚ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ ÑƒÐ´Ð¾Ð±Ð½Ñ‹Ðµ Ð¸Ð¼ÐµÐ½Ð° Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¾Ð².
 
 .macro adwi     to, val
 	_get_reg        \to, .L_to
@@ -161,9 +178,9 @@
 .endm ; movw_x
 
 
-; Çàìåíà êîìàíä ðàáîòàþùèõ ñ ðåãèñòðàìè ââîäà/âûâîäà
-; Òàêàÿ çàìåíà ïîçâîëèò ïèñàòü 'in r0, PORTA', 'out ETIFR, r0'
-; âìåñòî 'in r0, _SFR_IO_ADDR(PORTA)' è 'sts ETIFR, r0'
+; Ð—Ð°Ð¼ÐµÐ½Ð° ÐºÐ¾Ð¼Ð°Ð½Ð´ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÑŽÑ‰Ð¸Ñ… Ñ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ð¼Ð¸ Ð²Ð²Ð¾Ð´Ð°/Ð²Ñ‹Ð²Ð¾Ð´Ð°
+; Ð¢Ð°ÐºÐ°Ñ Ð·Ð°Ð¼ÐµÐ½Ð° Ð¿Ð¾Ð·Ð²Ð¾Ð»Ð¸Ñ‚ Ð¿Ð¸ÑÐ°Ñ‚ÑŒ 'in r0, PORTA', 'out ETIFR, r0'
+; Ð²Ð¼ÐµÑÑ‚Ð¾ 'in r0, _SFR_IO_ADDR(PORTA)' Ð¸ 'sts ETIFR, r0'
 .macro inb	to, from
 	.ifgt \from - 64 - 32
 	lds	\to, \from
@@ -282,7 +299,7 @@
 .endm ; ldsw
 
 .macro stsw	addr, reg
-; Ìàêðîñ stsw ïðàâèëüíî ðàáîòàåò ñ ðåãèñòðàìè ââîäà/âûâîäà
+; ÐœÐ°ÐºÑ€Ð¾Ñ stsw Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚ Ñ Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ð¼Ð¸ Ð²Ð²Ð¾Ð´Ð°/Ð²Ñ‹Ð²Ð¾Ð´Ð°
 	_get_reg	\reg, .L_reg
 #if __AVR_ARCH__ >= 100 /* __ATXMEGA__ */
 	sts	\addr, .L_reg
