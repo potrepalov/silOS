@@ -1,4 +1,4 @@
 # silOS
-Short Interupt Latency OS
+Short Interrupt Latency OS
 
 Real Time OS for microcontrollers: ATmega, attiny, ATXmega.
