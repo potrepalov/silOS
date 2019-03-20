@@ -58,7 +58,7 @@ Event_Watch:
 #endif /* BIG_SLEEP */
 
 Event_WatchWithTimeout:
-; RegType_t Event_WatchWithTimeout( Event_t event, SleepTipe ticks )
+; RegType_t Event_WatchWithTimeout( Event_t event, SleepTime_t ticks )
 ; Ожидает указанное событие в течении указаного времени.
 ; При выходе разрешает прерывания и разблокирует диспетчер потоков.
 ;

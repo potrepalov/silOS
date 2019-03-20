@@ -36,7 +36,7 @@
 .type	Signal_Wait, @function
 
 Signal_Wait:
-; RegType_t Signal_Wait( Signal sig )
+; RegType_t Signal_Wait( Signal_t sig )
 ; Если сигнал не установлен, то ожидает его установки.
 ; При выходе разрешает прерывания и разблокирует диспетчер потоков.
 ;
@@ -57,7 +57,7 @@ Signal_Wait:
 #endif /* BIG_SLEEP */
 
 Signal_WaitWithTimeout:
-; RegType_t Signal_WaitWithTimeout( Signal sig, SleepTime_t ticks )
+; RegType_t Signal_WaitWithTimeout( Signal_t sig, SleepTime_t ticks )
 ; Если сигнал не установлен, то ожидает его установки в течении
 ; указаного времени.
 ; При выходе разрешает прерывания и разблокирует диспетчер потоков.
