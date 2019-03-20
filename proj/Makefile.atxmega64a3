@@ -1,0 +1,91 @@
+# Makefile
+#
+# main Makefile
+#
+# GOALS:
+# clean	- clean working dirs
+# fhex	- Intel .hex for flash
+# ehex	- Intel .hex for eeprom
+# fsrec	- Motorola .srec for flash
+# esrec	- Motorola .srec for eeprom
+# fbin	- .bin for flash
+# ebin	- .bin for eeprom
+# lst	- listing
+# flash	- fhex, fsrec, fbin
+# eeprom - ehex, esrec, ebin
+# hex	- fhex, ehex
+# srec	- fsrec, esrec
+# bin	- fbin, ebin
+# all	- clean, lst, flash, eeprom
+# elf   - .elf file
+# tag   - tags, cscope.out
+#
+
+
+.DEFAULT_GOAL	:= hex
+
+
+# MAKE_CRC_OF_FILE := yes
+# MAKE_HEAP_START_H := yes
+
+
+# начало памяти, распределяемой автоматически
+# 0x2000 ... 0x20FF -- стек прерываний
+LDFLAGS += -Wl,--section-start,.data=0x802100
+
+PRG             := prog-name
+
+MCU_TARGET      := atxmega64a3
+F_CPU           := 32000000
+
+OPTIMIZE        := -O2 -fomit-frame-pointer
+
+CFLAGS += -g
+
+
+# регистры, распределяемые вручную
+#
+#REGS  = -ffixed-r2  -ffixed-r3
+#REGS += -ffixed-r4  -ffixed-r5
+#REGS += -ffixed-r6  -ffixed-r7  -ffixed-r8  -ffixed-r9
+#REGS += -ffixed-r10 -ffixed-r11 -ffixed-r12
+#REGS += -ffixed-r13 -ffixed-r14 -ffixed-r15
+#REGS += -ffixed-r16 -ffixed-r17
+
+
+#CFLAGS += --pedantic 
+#CFLAGS += --std=gnu99
+CFLAGS += -fshort-enums -Wswitch -fpack-struct -funsigned-char
+CFLAGS += -funsigned-bitfields
+CFLAGS += -finline-functions-called-once
+CFLAGS += -foptimize-sibling-calls
+CFLAGS += -ffunction-sections 
+CFLAGS += -fzero-initialized-in-bss
+CFLAGS += -Wdiv-by-zero -Wempty-body -Wfloat-equal
+CFLAGS += -Wignored-qualifiers
+CFLAGS += -Wimplicit-function-declaration -Wimplicit-int -Wmissing-braces
+CFLAGS += -Wmissing-declarations -Wmissing-parameter-type -Wmissing-prototypes
+CFLAGS += -Wmultichar -Wnonnull -Wparentheses -Wreturn-type
+CFLAGS += -Wsequence-point -Wsign-compare -Wsign-conversion
+CFLAGS += -Wstrict-prototypes -Wtype-limits
+CFLAGS += -Woverflow -Wuninitialized
+CFLAGS += -mstrict-X
+LDFLAGS += -Wl,--gc-section,--reduce-memory-overheads,--relax
+
+# байт EEPROM с адресом 0 не используем
+LDFLAGS += -Wl,--section-start,.eeprom=0x810001
+
+
+
+OBJDIR          := obj
+MK_DIRS         := $(OBJDIR)
+
+
+SRCDIR          := .
+include makef.mk
+
+include rules.mk
+
+
+#
+# End of file  Makefile

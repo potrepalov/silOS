@@ -1,0 +1,5 @@
+/proj/silOS
+/proj/obj
+*.hex
+*.srec
+*.bin
